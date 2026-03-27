@@ -3,8 +3,8 @@ import 'package:projeto02/app/routes/app_routes.dart';
 
 import 'routes/app_pages.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppWidget extends StatelessWidget {
+  const AppWidget({super.key});
 
   @override
   Widget build(BuildContext context /*Pede retorno de um widget*/) {
