@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projeto02/features/auth/model/user_model.dart';
 import 'package:validatorless/validatorless.dart';
 
-class LoginViewmodel extends ChangeNotifier {
+class RegisterViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   bool obscurePassword = true;
   bool isLoading = false;
@@ -24,12 +26,24 @@ class LoginViewmodel extends ChangeNotifier {
     ])(value);
   }
 
+  String? confirmPasswordValidator(String? value) {
+    return Validatorless.multiple([
+      Validatorless.required("Senha é obrigatória!"),
+      Validatorless.min(6, "A senha deve ter pelo menos 6 caracteres!"),
+    ])(value);
+  }
+
   void togglePasswordVisibility() {
     obscurePassword = !obscurePassword;
     notifyListeners();
   }
 
-  Future<void> onLoginPressed(BuildContext context) async {
+  void toggleConfirmPasswordVisibility() {
+    obscurePassword = !obscurePassword;
+    notifyListeners();
+  }
+
+  Future<void> onRegisterPressed(BuildContext context) async {
     final formValid = formKey.currentState?.validate() ?? false;
 
     if (!formValid) {
@@ -39,21 +53,30 @@ class LoginViewmodel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(
+      Duration(seconds: 2),
+    );
+
+    final user = UserModel(
+      name: "Tester",
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
 
     isLoading = false;
     notifyListeners();
 
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
-
-    debugPrint("Login realizado com: $email / $password");
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(
-      SnackBar(content: Text("Login enviado para: $email!")),
+    debugPrint(
+      "Usuário cadastrado: ${user.name} / ${user.email} / ${user.password}",
     );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Cadastro realizado com sucesso para ${user.name}"),
+      ),
+    );
+
+    Navigator.pop(context);
   }
 
   void disposeControllers() {

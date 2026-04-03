@@ -120,7 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: viewmodel.isLoading ? null : () {},
+                        onPressed: viewmodel.isLoading
+                            ? null
+                            : () => viewmodel.onLoginPressed(context),
                         child: viewmodel.isLoading
                             ? const SizedBox(
                                 width: 22,
